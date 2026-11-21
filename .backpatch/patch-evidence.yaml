@@ -1,0 +1,21 @@
+schema: osera-patch-evidence/0.1.0
+producer: moderne
+release: 0.2.3-backpatch-00001
+baseline: v0.2.2+backpatch.baseline
+fixes:
+  - cve: CVE-2026-45822
+    upstream_fix_url: https://github.com/SamVerschueren/decode-uri-component/commit/fa479dafeede7bedf04e5c89aa78f2a78c664005
+    advisory_url: https://nvd.nist.gov/vuln/detail/CVE-2026-45822
+    patch_commit_url: https://github.com/moderne-backpatch-alliance/backpatch-decode-uri-component/commit/db4ba6a
+    basis: adapted
+    artifacts:
+      - decode-uri-component
+    note: "New in this release; upstream's fix in 0.5.0, adapted to 0.2.2. It closes the advisory: decode-uri-component: Denial of service via exponential decoding of malformed percent-encoded input."
+tests:
+  commit: db4ba6ace5881b7bccfb425a6aeb0347243c2757
+  command: npm pack --ignore-scripts, then ava --tap test.js test-slowdown.js in the tested tree with the packed files laid over, each TAP assertion recorded into the JUnit report
+  runtime: Node.js v18.20.8, macOS 27.2 arm64
+  report: decode-uri-component-0.2.3-backpatch-00001-tests.zip
+  report_sha256: cc800644f7e2177f5c2ecc1ea1e7c6063a16955707d0988cfc3e8235796e0efb
+  result: pass
+  note: "upstream's ava suite (test.js) and our test-slowdown.js on the packed package's files at the tested commit: 136 tests, 136 passed, 0 failed, 0 skipped. The CVE tests (test.js test-slowdown.js), with this release's production lines reverted at the tested commit: 136 tests, 133 passed, 3 failed, 0 skipped; with them: 136 tests, 136 passed, 0 failed, 0 skipped. Built with no build step, npm pack --ignore-scripts in a directory named decode-uri-component, 2 of npmjs's 4 files for 0.2.2 are identical; the rest are index.js, package.json. The archive's file-origins.yaml maps each packaged file to the commit, or names its inputs and build."
